@@ -96,11 +96,6 @@ router.put("/courses/:id", asyncHandler(async (req, res) => {
       throw error;
     }
   }
-
-  // if (course) {
-  //   await course.update(req.body);
-  //   res.status(204).end();
-  // }
 }));
 
 // Route that deletes an existing course.
