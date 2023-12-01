@@ -22,16 +22,14 @@ function asyncHandler(cb) {
 
 // Route that returns the currently authenticated user.
 router.get("/users", authenticateUser, asyncHandler(async (req, res)=> {
-  let users = await User.findAll();
-  res.json(users); 
-  const user = req.user;
-  console.log(user.emailAddress);
-
+  // let users = await User.findAll();
+  // res.json(users); 
+  const user = req.currentUser;
   res.json({
     username: user.emailAddress,
     name: `${user.firstName} ${user.lastName}`
   });
-  c
+  
 }));
 
 // Route that creates a user.
