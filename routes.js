@@ -25,7 +25,7 @@ router.get("/users", authenticateUser, asyncHandler(async (req, res)=> {
   let users = await User.findAll();
   res.json(users); 
   const user = req.user;
-  onsole.log(user.emailAddress);
+  console.log(user.emailAddress);
 
   res.json({
     username: user.emailAddress,
