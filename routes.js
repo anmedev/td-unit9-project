@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const Course = require("./models").Course;
 const User = require("./models").User;
+const {authenticateUser} = require("./middleware/auth-user");
 
 //-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-ASYNC ERROR HANDLER-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 function asyncHandler(cb) {
@@ -20,9 +21,17 @@ function asyncHandler(cb) {
 //-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-USER ROUTES-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 // Route that returns the currently authenticated user.
-router.get("/users", asyncHandler(async (req, res)=> {
+router.get("/users", authenticateUser, asyncHandler(async (req, res)=> {
   let users = await User.findAll();
-  res.json(users);
+  res.json(users); 
+  const user = req.user;
+  onsole.log(user.emailAddress);
+
+  res.json({
+    username: user.emailAddress,
+    name: `${user.firstName} ${user.lastName}`
+  });
+  c
 }));
 
 // Route that creates a user.
@@ -109,4 +118,4 @@ router.delete("/courses/:id", asyncHandler(async (req, res) => {
   }
 }));
 
-  module.exports = router;
+module.exports = router;
