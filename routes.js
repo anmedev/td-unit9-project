@@ -65,8 +65,8 @@ router.get("/courses/:id", asyncHandler(async (req, res)=> {
 // Route that creates a new course and adds it to the list of courses.
 router.post("/courses", authenticateUser, asyncHandler(async (req, res) => {
   try {
-    await Course.create(req.body);
-    res.status(201).location('/courses').end();
+    const course = await Course.create(req.body);
+    res.status(201).location(`/courses/${course.id}`).end();
   } catch (error) {
     console.log('ERROR: ', error.name);
     if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
