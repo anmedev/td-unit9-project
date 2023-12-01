@@ -22,14 +22,8 @@ function asyncHandler(cb) {
 
 // Route that returns the currently authenticated user.
 router.get("/users", authenticateUser, asyncHandler(async (req, res)=> {
-  // let users = await User.findAll();
-  // res.json(users); 
   const user = req.currentUser;
-  res.json({
-    username: user.emailAddress,
-    name: `${user.firstName} ${user.lastName}`
-  });
-  
+  res.json(user);
 }));
 
 // Route that creates a user.
@@ -69,7 +63,7 @@ router.get("/courses/:id", asyncHandler(async (req, res)=> {
 }));
 
 // Route that creates a new course and adds it to the list of courses.
-router.post("/courses", asyncHandler(async (req, res) => {
+router.post("/courses", authenticateUser, asyncHandler(async (req, res) => {
   try {
     await Course.create(req.body);
     res.status(201).location('/courses').end();
@@ -85,7 +79,7 @@ router.post("/courses", asyncHandler(async (req, res) => {
 }));
 
 // Route that updates an existing course.
-router.put("/courses/:id", asyncHandler(async (req, res) => {
+router.put("/courses/:id", authenticateUser, asyncHandler(async (req, res) => {
   const course = await Course.findByPk(req.params.id, {
     include: [{model: User}],
   });
@@ -106,7 +100,7 @@ router.put("/courses/:id", asyncHandler(async (req, res) => {
 }));
 
 // Route that deletes an existing course.
-router.delete("/courses/:id", asyncHandler(async (req, res) => {
+router.delete("/courses/:id", authenticateUser, asyncHandler(async (req, res) => {
   const course = await Course.findByPk(req.params.id, {
     include: [{model: User}],
   });
