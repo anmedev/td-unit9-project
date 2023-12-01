@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const routes = require("./routes");
 const sequelize = require("./models").sequelize;
 
+//-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-APP SET UP-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Creates variable to enable global error logging.
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 
@@ -28,25 +29,25 @@ app.get('/', (req, res) => {
 // Adds routes.
 app.use('/api', routes);
 
-// Sends 404 if no other route matched.
+//-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-ERROR HANDLERS-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
 app.use((req, res) => {
   res.status(404).json({
     message: 'Route Not Found',
   });
 });
 
-// Sets up a global error handler.
 app.use((err, req, res, next) => {
   if (enableGlobalErrorLogging) {
     console.error(`Global error handler: ${JSON.stringify(err.stack)}`);
   }
-
   res.status(err.status || 500).json({
     message: err.message,
     error: {},
   });
 });
 
+//-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-DATABASE CONNECTION-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 // Sets our port.
 app.set('port', process.env.PORT || 5000);
 
